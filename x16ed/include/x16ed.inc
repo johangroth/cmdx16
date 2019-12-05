@@ -35,10 +35,10 @@ line_lnk_s: .struct
 ;;;
 ;; VERA constants
 ;;;
+        vera_hi  = $9f21
+        vera_lo  = $9f20
         vera_inc = $9f22
-        vera_hi = $9f21
-        vera_lo = $9f20
-        vera_rw = $9f23
+        vera_rw  = $9f23
 
 ;;;
 ;; Kernel subroutines
