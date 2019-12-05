@@ -43,11 +43,10 @@ set_mode: .proc
 clear_screen: .proc
         lda #%00010000      ;Set VERA increment to 1
         sta vera_inc
-        stz vera_hi
-        stz vera_lo
-        ldy #60
+        ldy #0
 clsc01:
-        inc vera_hi
+        sty vera_hi
+        stz vera_lo
         ldx #80
 clsc02:
         lda #32
@@ -56,7 +55,8 @@ clsc02:
         sta vera_rw
         dex
         bne clsc02
-        dey
+        iny
+        cpy #60
         bne clsc01
         rts
         .pend

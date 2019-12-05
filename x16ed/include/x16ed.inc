@@ -1,5 +1,21 @@
 ;;;
-;; Ascii -> PETSCII
+;; Struct line_lnk_s
+;; line_lnk_s is a linked list which holds the address to
+;; previous, current and next line in the editor. As the editor data lives in banked RAM
+;; we have to keep track of the bank as well as the address.
+;;;
+line_lnk_s: .struct
+        bank_previous_line:     .byte 0         ;Bank number to previous line
+        offset_previous_line:   .word 0         ;Offset to previous line, 0 if first line
+
+        bank_next_line:         .byte 0         ;Bank number to next line
+        offset_next_line:       .word 0         ;Offset to next line, 0 if last line
+
+        line_data:              .byte 0         ;Max 80 bytes of line data.
+        .ends
+
+;;;
+;; ASCII -> PETSCII
 ;;;
         .enc "petscii"  ;define an ascii->petscii encoding
         .cdef " @", 32  ;characters
