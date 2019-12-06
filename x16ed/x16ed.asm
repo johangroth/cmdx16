@@ -19,8 +19,6 @@ next:
         jsr getin
         jsr chrout
         bra next
-done:
-        rts
 
 set_mode: .proc
         lda #$0f            ;Bank 4
