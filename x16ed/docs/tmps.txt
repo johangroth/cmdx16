@@ -1,0 +1,179 @@
+CURSOR MOVEMENT
+---------------
+CRSR LEFT/RIGHT  - move left/right one position in line
+CRSR UP/DOWN     - go up/down a line
+RETURN           - insert a line (if insert line mode) and go to this line
+SHIFT+RETURN     - jump to next line
+F1/F7            - scroll 20 lines up/down
+F2/F8            - jump to source-code start/end
+←CRSR UP/DOWN    - scroll 200 lines up/down
+←Q               - goto to beginning of line
+←N               - goto line #
+←Y               - goto bottom line
+DEL              - delete character left cursor
+INST             - auto insert char mode on/off
+←DEL             - delete actual line
+←INST            - auto insert line mode on/off
+←RETURN          - split-line: The remainder of the current line (everything to the right and under the current cursor location) is moved into a new line which is inserted immediately below the current line.
+←CRSR-R          - Moves the cursor to column 39.
+←CRSR-L	         - Moved cursor to column 0.
+←q               - Move cursor to column 0 (the leftmost column).
+←n	             - Move cursor to a line number
+
+
+ASSEMBLING
+----------
+←3  - Assembles to the assembly bank, which is bank 0 in all mods supporting extra RAM, or simply directly to c64 main memory on the unexpanded c64 mod.
+←#	- Assembles to the current object bank; only enabled on mods supporting extra RAM.
+←4  - list assembled file to: ?=printer, *=screen, filename=file
+←5  - assemble to object (executable) file
+←%	- assemble-to-slave: Assembles across a cable to a slave machine; only enabled in the X2/R2 mods.
+←U  - list labels to: ?=printer, *=screen, filename=file
+←%  - assemble-to-slave: Assembles across a cable to a slave machine; only enabled in the X2/R2 mods.
+←u  - Prompts for a filename to which a listing of each label and the memory address that it resolves to will be saved to disk as a SEQ file. Instead of a filename, enter ? by itself to print directly to a printer (device 4) or * by itself to output to the screen (CBM pauses output, run/stop aborts). Note that the output is based on the label resolutions from the last time the source code was assembled, and if list-labels is invoked prior to assembling any source code, the output will be empty.
+←U  - Identical to ←u, except the format of the output is compatible for loading into the VICE emulator monitor.
+
+SETTING TABULATORS
+------------------
+←7  - set cursor tab (e.g. where cursor jump to after RETURN)
+←8  - set sourcecode tab (max.11)
+
+LINE OPERATIONS
+---------------
+←2      - writes ';---------------------------------------' line
+←/      - delete from cursor to end of line
+←SPACE  - fill up line with SPACE
+←↑      - copy line
+←=      - join line
+←£      - paste line
+←z      - undo line (imediately after ←2, ←/, ←SPACE, ←£)
+
+BLOCK AND MARK OPERATIONS
+-------------------------
+←m  - set mark (#0-9), blocks start (#s) or block end (#e)
+←g  - goto mark (#0-9)
+←;  - kill mark (0-9)
+←:  - list all marks
+←b  - block operations: write (to ASCII SEQ file), kill, copy.
+  w	write-block: Writes the current marked block to disk as a SEQ file.
+  c	copy-block: Copies the current marked block to the current cursor position.
+  m	move-block: Moves the current marked block to current cursor position.
+  k	kill-block: Erases the current marked block.
+
+SEQUENTIAL FILE OPERATIONS
+--------------------------
+w	Write current source is saved to disk as a SEQ file.
+e	Insert (IMPORT ASCII SEQ) file from disk to current position
+
+SEARCH & REPLACE
+----------------
+←f   - search a string
+←h   - search next occurance
+←i	 - search for a label
+←r   - replace string1 with string2, search first ocurrance
+←t   - replace & search next replace
+←y   - replace all occurances
+
+FUNCTION KEY PROGRAMMING
+------------------------
+←k   - Prompts for a re-definable function key (F3-F6) then allows the user to enter a new definition for the selected key.
+←K   - Reset funcion keys (F3=.word, F4=assemble&run, F5=.byte, F6=del line)
+
+DISK OPERATIONS
+---------------
+←*  - disk directory
+←@  - Disk command. Entering a @ by itself will send a status command to the device.
+←d  - Selects the next available device number on the bus between 8 and 15.
+←w  - writes all source-code to ASCII SEQ file (EXPORT)
+←l  - load source-code
+←s  - save source-code (possible overwrite with @: prefix)
+←!	- displays the contents of SEQ filen on screen; CBM pauses output, run/stop aborts.
+
+MEMORY OPERATIONS
+-----------------
+←6  - Prompts for a region of memory (start and end address). Data in that region are read and translated into .byte statements which are inserted into the source code at the current cursor line. In mods supporting extra RAM, the data is read from the current object bank; otherwise the data is read from the c64 main memory.
+
+REU OPERATIONS
+--------------
+←R	- Activate the expansion RAM submenu (where applicable), with these additional key commands:
+  l	load-to-ram: Prompts for a filename. A second prompt is given for a load address, using the file's actual load address as a default. Then the file is loaded into the current object bank at the given address.
+  b	backup-to-bank: Prompts for an available source bank number, and then copies the active source code into that bank.
+  o	set-object-bank: Prompts for an available RAM bank and uses that as the new object bank.
+  s	swap-to-bank: Prompts for an available source bank number; if the selected bank contains a TMP/source instance, then the active source code is backed up to it's assigned bank and the selected bank is swapped into c64 main memory, becoming the new active source code. TMP will not allow swapping in a bank that doesn't already have a TMP instance in it.
+  j	set-jumpback: Prompts for an address, which will be the location to which the jumpback routine will be copied when executing an assembled code. If the address is set to $0000 then TMP will not copy the jumpbacker at all. The default address is $0140.
+
+PREFERENCES
+-----------
+←p	preferences-submenu: Activates the preferences editor submenu which can be used to modify the separator style and color scheme:
+    0  Edits the color used for $d020 (border).
+    1  Edits the color used for $d021 (background).
+    2  Edits the color used for the message line.
+    3  Edits the color used for the status line.
+    4  Edits the color used for regular source.
+    5  Edits the color used for source with a syntax error.
+    6  Edits the color used for source in the current marked block.
+    s  Edits the separator template
+    ↑  Prompts for a filename, to which a complete copy of the newly
+        customized TMP program is written to disk.
+
+(Note, this command does not work with TMP on C64 or VICE)
+
+MISCELLANEOUS
+-------------
+←c  - cold start (init TURBO-ASM. and clears source-code)
+←+  - add two hex numbers
+←-  - subtract two hex numbers
+←1  - exit from TURBO-ASM. (SYS $8000 or SYS 333 to restart)
+←a	- Sets the editor into a literal petscii mode; the cursor flashes slightly faster to indicate the setting. During this mode, all keypresses are taken literally as petscii sequences which are stored on the line. This mode is useful for entering color or cursor movement codes into .text strings that can be 'printed' from within your program. Hitting the ↑ key will quit this mode and return to normal editing.
+
+The next table shows all the behaviour of additional keys that are not combined with first pressing the command key:
+
+Function keys F3-F6 are redefinable, and have these default operations:
+KEY	ACTION
+----------
+INST	toggle-char-insert: Switches the editing mode for character insertion; when off, new key presses overwrite instead of insert.
+F1	Moves the cursor up by 20 lines.
+F2	Moves the cursor to line 0 (top of the source).
+F7	Moves the cursor down by 20 lines.
+F8	Moves the cursor to the bottom of the source.
+F3	Identical to ←+CRSR-U (cursor up by 200 lines).
+F4	Assembles (as with ←+3) and then auto executes the code.
+F5	Identical to ←+CRSR-D (cursor down by 200 lines).
+F6	Identical to ←+CRSR-D which invokes the RAM submenu.
+
+EXPRESSIONS
+-----------
+The assembler works with 8 and 16 bit numbers with following notations:
+$            - for hex numbers
+%            - for binary numbers
+! (or none)  - for decimal numbers
+"x"          - for characters
+
+Allowed operations in expressions (in high-to-low hierarcy order):
+( )          - brackets
+* /          - multiple, divide
++ -          - plus, minus
+: & .        - EOR, AND, OR operations
+
+Special operations:
+<            - lower byte of 16 bit expression
+>            - higher byte of 16 bit expression
+*            - actual assembling addr or define object-code start (*=start)
+
+NOTE: 1. Never use label after label=* or likewise combination.
+      2. Don't use area between $E000-$FFFF (reserved for TURBO-ASM labels).
+
+Labels:
+The first 8 characters recognized and all remain truncated.
+
+PSEUDO OPS
+----------
+.OFFS addr                - set object-code displacement (by adding addr)
+.BYTE byte1,byte2,...     - convert bytes
+.WORD word1,word2,...     - convert words
+.TEXT "text1","text2",... - convert text strings
+.MACRO                    - starts a macro definition. Preceede with a label.
+.ENDM                     - ends a macro definition.
+#macroname                - invoke a macro
+
+;                         - comments following
