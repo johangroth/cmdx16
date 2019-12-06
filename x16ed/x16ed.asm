@@ -10,6 +10,10 @@
 
         jsr set_mode
         jsr clear_screen
+        ldx #0
+        ldy #0
+        clc
+        jsr plot
 next:
         jsr getin
         jsr chrout
@@ -17,7 +21,6 @@ next:
         bra next
 done:
         rts
-hello   .null "hello world"
 
 set_mode: .proc
         lda #$0f            ;Bank 4
@@ -51,7 +54,7 @@ clsc01:
 clsc02:
         lda #32
         sta vera_rw
-        lda #1
+        lda #blue << 4 | white
         sta vera_rw
         dex
         bne clsc02

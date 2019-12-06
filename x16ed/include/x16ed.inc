@@ -41,6 +41,26 @@ line_lnk_s: .struct
         vera_rw  = $9f23
 
 ;;;
+;;  C-64 colours
+;;;
+        black = 0
+        white = 1
+        red = 2
+        cyan = 3
+        purple = 4
+        green = 5
+        blue = 6
+        yellow = 7
+        orange = 8
+        brown = 9
+        light_red = $a
+        gray1 = $b
+        gray2 = $c
+        light_green = $d
+        light_blue = $e
+        gray3 = $f
+
+;;;
 ;; Kernel subroutines
 ;;;
 
@@ -58,13 +78,14 @@ line_lnk_s: .struct
 
         iobase= $fff3           ;Returns base address of I/O devices (returns $9f60, first VIA)
         ioinit= $ff84           ;Initialise input/output
+        jsrfar= $ff6e           ;Jump to subroutines in other banks than current one
         listen= $ffb1           ;Command devices on the serial bus to LISTEN
 
         load  = $ffd5           ;Load RAM from a device
         membot= $ff9c           ;Read/set the bottom of memory
         memtop= $ff99           ;Read/set the top of memory
         open  = $ffc0           ;Open a logical file
-        plot  = $fff0           ;Read/set X,Y cursor position
+        plot  = $fff0           ;Read (SEC)/set (CLC) X .Y, Y .X cursor position
         ramtas= $ff87           ;Initialise RAM, allocate tape buffer, set screen $0400
 
         rdtim = $ffde           ;Read real time clock
