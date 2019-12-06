@@ -17,7 +17,6 @@
 next:
         jsr getin
         jsr chrout
-        inx
         bra next
 done:
         rts
