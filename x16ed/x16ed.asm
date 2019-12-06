@@ -1,4 +1,5 @@
         .cpu "w65c02" ;;; Make sure we can use all goodies from WDC65C02
+        .include "kernel.inc"
         .include "x16ed.inc"
 
         ;;; start address just after "10 sys 2064"
