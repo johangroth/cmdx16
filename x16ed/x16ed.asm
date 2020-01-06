@@ -11,14 +11,29 @@
 
         jsr set_mode
         jsr clear_screen
+        sei
+        lda $314
+        sta irq_v_low
+        lda $315
+        sta irq_v_high
+        lda #<xed_irq
+        sta $314
+        lda #>xed_irq
+        sta $315
+        cli
         ldx #0
         ldy #0
         clc
         jsr plot
 next:
         jsr getin
+        jsr chrin
         jsr chrout
         bra next
+
+xed_irq:
+        jmp (irq_v)
+
 
 set_mode: .proc
         lda #$0f            ;Bank 4

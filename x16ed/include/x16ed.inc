@@ -65,3 +65,6 @@ line_lnk_s: .struct
 ;; Zero page variables
 ;;;
         zero_page = $20
+        irq_v     = $21
+        irq_v_low = $21
+        irq_v_high= $22
