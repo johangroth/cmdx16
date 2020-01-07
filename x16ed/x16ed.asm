@@ -32,16 +32,17 @@ next:
         bra next
 
 xed_irq:
-
-
-
+        ; get x, y of cursor position
+        ; calculate vera memory position of x, y (curs_vera_pos)
+        ; get character at curs_vera_pos and invert bit 7
+        ; store new character at curs_vera_pos
 
         ;; Blink cursor
         inc cursor_blink_counter
         lda cursor_blink_counter
         cmp #FPS/2
         bne isr_l100
-        stz cursor_blink_counter ;; you can use stz ;)
+        stz cursor_blink_counter
         lda cursor_lit
         eor #$80
         sta cursor_lit
