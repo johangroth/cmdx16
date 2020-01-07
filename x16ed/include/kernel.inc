@@ -1,4 +1,10 @@
 ;;;
+;; Kernal vectors
+;;;
+
+      kernal_irq_v = $314
+      
+;;;
 ;; Kernel subroutines
 ;;;
 

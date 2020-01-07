@@ -12,14 +12,14 @@
         jsr set_mode
         jsr clear_screen
         sei
-        lda $314
+        lda kernal_irq_v
         sta irq_v_low
-        lda $315
+        lda kernal_irq_v + 1
         sta irq_v_high
         lda #<xed_irq
-        sta $314
+        sta kernal_irq_v
         lda #>xed_irq
-        sta $315
+        sta kernal_irq_v + 1
         cli
         ldx #0
         ldy #0
@@ -32,6 +32,25 @@ next:
         bra next
 
 xed_irq:
+        FPS = 50 ;; 60 on NTSC
+
+        CursorBlinkCounter = $ee
+        CursorLit = $ef
+        CursorPointer = $ea ;; check rom for the cursor pointer
+
+        ;; Blink cursor
+        inc CursorBlinkCounter
+        lda CursorBlinkCounter
+        cmp #FPS/2
+        bne isr_l100
+        stz CursorBlinkCounter ;; you can use stz ;)
+        lda CursorLit
+        eor #$80
+        sta CursorLit
+        lda (CursorPointer)
+        eor #$80
+        sta (CursorPointer)
+isr_l100:
         jmp (irq_v)
 
 
