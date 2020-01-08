@@ -35,9 +35,9 @@ line_lnk_s: .struct
 ;;;
 ;; VERA constants
 ;;;
-        vera_hi  = $9f21
-        vera_lo  = $9f20
-        vera_inc = $9f22
+        vera_high  = $9f20
+        vera_middle  = $9f21
+        vera_low = $9f22
         vera_rw  = $9f23
 
 ;;;
@@ -76,3 +76,6 @@ line_lnk_s: .struct
         cursor_blink_counter    = $23
         cursor_lit              = $24
         cursor_pointer          = $25 ;; check rom for the cursor pointer
+        y_pos                   = $26
+        x_pos                   = $28
+        curs_vera_pos           = $29

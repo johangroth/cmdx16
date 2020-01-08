@@ -27,15 +27,37 @@
         jsr plot
 next:
         jsr getin
-        ; jsr chrin ; basic INPUT routine. Blinks cursor.
+        ; jsr chrin ; BASIC INPUT routine. Blinks cursor.
         jsr chrout
         bra next
 
 xed_irq:
+        pha
+        phx
+        phy
         ; get x, y of cursor position
+        sec
+        jsr plot
+        stx y_pos
+        stz y_pos + 1
+        sty x_pos
+
         ; calculate vera memory position of x, y (curs_vera_pos)
-        ; get character at curs_vera_pos and invert bit 7
-        ; store new character at curs_vera_pos
+        ; curs_vera_pos = y_pos * 256 + x_pos * 2
+        ldy #8
+mul256:
+        asl y_pos
+        rol y_pos + 1
+        dex
+        bne mul256
+        asl x_pos
+        lda y_pos
+        clc
+        adc x_pos
+        sta curs_vera_pos
+        lda y_pos + 1
+        adc #0                  ; Add carry
+        sta curs_vera_pos + 1
 
         ;; Blink cursor
         inc cursor_blink_counter
@@ -43,30 +65,43 @@ xed_irq:
         cmp #FPS/2
         bne isr_l100
         stz cursor_blink_counter
-        lda cursor_lit
+        ; get character at curs_vera_pos and invert bit 7
+        ldy #0
+        ldx curs_vera_pos + 1
+        lda curs_vera_pos
+        jsr set_vera_hml
+        lda vera_rw
         eor #$80
-        sta cursor_lit
-        lda (cursor_pointer)
-        eor #$80
-        sta (cursor_pointer)
+        ; store new character at curs_vera_pos
+        sta vera_rw
 isr_l100:
+        ply
+        plx
+        pla
         jmp (irq_v)
 
 
+set_vera_hml: .proc
+        sta vera_low
+        stx vera_middle
+        sty vera_high
+        rts
+        .pend
+
 set_mode: .proc
         lda #$0f            ;Bank 4
-        sta vera_inc
-        stz vera_hi
+        sta vera_low
+        stz vera_middle
         lda #$41            ;H-scale
-        sta vera_lo
+        sta vera_high
         ldy text_mode
         lda modex,y
         sta vera_rw
         lda #$42            ;V-scale
-        sta vera_lo
+        sta vera_high
         lda modey,y
         sta vera_rw
-        stz vera_inc        ;Bank 0
+        stz vera_low        ;Bank 0
         lda sizex,y
         sta scr_size_x
         lda sizey,y
@@ -76,11 +111,11 @@ set_mode: .proc
 
 clear_screen: .proc
         lda #%00010000      ;Set VERA increment to 1
-        sta vera_inc
+        sta vera_low
         ldy #0
 clsc01:
-        sty vera_hi
-        stz vera_lo
+        sty vera_middle
+        stz vera_high
         ldx #80
 clsc02:
         lda #32
