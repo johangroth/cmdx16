@@ -62,9 +62,17 @@ line_lnk_s: .struct
 
 
 ;;;
+;; Constants
+;;;
+        FPS = 50 ;; 60 on NTSC
+
+;;;
 ;; Zero page variables
 ;;;
-        zero_page = $20
-        irq_v     = $21
-        irq_v_low = $21
-        irq_v_high= $22
+        zero_page               = $20
+        irq_v                   = $21
+        irq_v_low               = $21
+        irq_v_high              = $22
+        cursor_blink_counter    = $23
+        cursor_lit              = $24
+        cursor_pointer          = $25 ;; check rom for the cursor pointer

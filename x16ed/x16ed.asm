@@ -27,29 +27,28 @@
         jsr plot
 next:
         jsr getin
-        jsr chrin
+        ; jsr chrin ; basic INPUT routine. Blinks cursor.
         jsr chrout
         bra next
 
 xed_irq:
-        FPS = 50 ;; 60 on NTSC
-
-        CursorBlinkCounter = $ee
-        CursorLit = $ef
-        CursorPointer = $ea ;; check rom for the cursor pointer
+        ; get x, y of cursor position
+        ; calculate vera memory position of x, y (curs_vera_pos)
+        ; get character at curs_vera_pos and invert bit 7
+        ; store new character at curs_vera_pos
 
         ;; Blink cursor
-        inc CursorBlinkCounter
-        lda CursorBlinkCounter
+        inc cursor_blink_counter
+        lda cursor_blink_counter
         cmp #FPS/2
         bne isr_l100
-        stz CursorBlinkCounter ;; you can use stz ;)
-        lda CursorLit
+        stz cursor_blink_counter
+        lda cursor_lit
         eor #$80
-        sta CursorLit
-        lda (CursorPointer)
+        sta cursor_lit
+        lda (cursor_pointer)
         eor #$80
-        sta (CursorPointer)
+        sta (cursor_pointer)
 isr_l100:
         jmp (irq_v)
 
