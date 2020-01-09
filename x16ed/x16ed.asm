@@ -41,6 +41,12 @@ xed_irq:
         pha
         phx
         phy
+        ;; Blink cursor
+        inc cursor_blink_counter
+        lda cursor_blink_counter
+        cmp #FPS/2
+        bne isr_l100
+        stz cursor_blink_counter
         ; get x, y of cursor position
         sec
         jsr plot
@@ -56,21 +62,15 @@ mul256:
         rol y_pos + 1
         dey
         bne mul256
-        asl x_pos
-        lda y_pos
+        asl x_pos               ; x_pos * 2
+        lda y_pos               ; Add y_pos
         clc
         adc x_pos
-        sta curs_vera_pos
+        sta curs_vera_pos       ; and store address
         lda y_pos + 1
         adc #0                  ; Add carry
         sta curs_vera_pos + 1
 
-        ;; Blink cursor
-        inc cursor_blink_counter
-        lda cursor_blink_counter
-        cmp #FPS/2
-        bne isr_l100
-        stz cursor_blink_counter
         ; get character at curs_vera_pos and invert bit 7
         ldy #0
         ldx curs_vera_pos + 1
