@@ -35,7 +35,6 @@ next:
 ;;;
 ;; ISR for blinking cursor.
 ;; TODO: when moving cursor restore original character so an inverted character is not displayed.
-;; TODO: fix x-position, blinking only works in first column.
 ;;;
 xed_irq:
         pha
@@ -72,9 +71,9 @@ mul256:
         sta curs_vera_pos + 1
 
         ; get character at curs_vera_pos and invert bit 7
-        ldy #0
-        ldx curs_vera_pos + 1
-        lda curs_vera_pos
+        lda #0                  ; vera high
+        ldx curs_vera_pos + 1   ; vera middle
+        ldy curs_vera_pos       ; vera low
         jsr set_vera_hml
         lda vera_rw
         eor #$80
@@ -88,26 +87,27 @@ isr_l100:
 
 
 set_vera_hml: .proc
-        sta vera_low
-        stx vera_middle
-        sty vera_high
+        sta vera_addr_hi
+        stx vera_addr_mid
+        sty vera_addr_lo
         rts
         .pend
 
 set_mode: .proc
-        lda #$0f            ;Bank 4
-        sta vera_low
-        stz vera_middle
-        lda #$41            ;H-scale
-        sta vera_high
+        stz vera_ctrl           ; Use data0 ($9f23) as address port
+        lda #$0f                ;Bank f
+        sta vera_addr_hi
+        stz vera_addr_mid
+        lda #$41                ;H-scale
+        sta vera_addr_lo
         ldy text_mode
         lda modex,y
         sta vera_rw
-        lda #$42            ;V-scale
-        sta vera_high
+        lda #$42                ;V-scale
+        sta vera_addr_lo
         lda modey,y
         sta vera_rw
-        stz vera_low        ;Bank 0
+        stz vera_addr_hi        ;Bank 0
         lda sizex,y
         sta scr_size_x
         lda sizey,y
@@ -117,16 +117,16 @@ set_mode: .proc
 
 clear_screen: .proc
         lda #%00010000      ;Set VERA increment to 1
-        sta vera_low
+        sta vera_addr_hi
         ldy #0
 clsc01:
-        sty vera_middle
-        stz vera_high
+        sty vera_addr_mid
+        stz vera_addr_lo
         ldx #80
 clsc02:
         lda #32
         sta vera_rw
-        lda #blue << 4 | white
+        lda #blue << 4 | white  ;blue background and white character
         sta vera_rw
         dex
         bne clsc02

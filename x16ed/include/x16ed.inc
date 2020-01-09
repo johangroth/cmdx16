@@ -35,11 +35,20 @@ line_lnk_s: .struct
 ;;;
 ;; VERA constants
 ;;;
-        vera_high  = $9f20
-        vera_middle  = $9f21
-        vera_low = $9f22
+        vera_addr_lo  = $9f20
+        vera_addr_mid  = $9f21
+        vera_addr_hi = $9f22
         vera_rw  = $9f23
-
+        vera_ctrl = $9f25
+        ;Reg 	Addr 	Name 	          Bit 7   Bit 6   Bit 5   Bit 4   Bit 3   Bit 2   Bit 1   Bit 0
+        ; 0 	$9F20 	vera_addr_lo 	                              Address (7:0)
+        ; 1 	$9F21 	vera_addr_mid 	                             Address (15:8)
+        ; 2 	$9F22 	vera_addr_hi 	  Increment 	                  Address (19:16)
+        ; 3 	$9F23 	vera_data0 	    Data port 0
+        ; 4 	$9F24 	vera_data1 	    Data port 1
+        ; 5 	$9F25 	vera_ctrl 	     RESET 	                 -                        ADDRSEL
+        ; 6 	$9F26 	vera_ien 	      - 	                     UART  SPRCOL LINE 	  VSYNC
+        ; 7 	$9F27 	vera_isr 	      - 	                     UART  SPRCOL LINE 	  VSYNC
 ;;;
 ;;  C-64 colours
 ;;;
