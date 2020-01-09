@@ -31,6 +31,12 @@ next:
         jsr chrout
         bra next
 
+
+;;;
+;; ISR for blinking cursor.
+;; TODO: when moving cursor restore original character so an inverted character is not displayed.
+;; TODO: fix x-position, blinking only works in first column.
+;;;
 xed_irq:
         pha
         phx
@@ -48,7 +54,7 @@ xed_irq:
 mul256:
         asl y_pos
         rol y_pos + 1
-        dex
+        dey
         bne mul256
         asl x_pos
         lda y_pos
